@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUP Sztum - System Informacyjny</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #slideshow-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        /* Slajd powitalny */
+        .slide-welcome {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            flex-direction: column;
+        }
+
+        .slide-welcome .logo {
+            font-size: 120px;
+            color: #fff;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .slide-welcome h1 {
+            font-size: 80px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .slide-welcome .subtitle {
+            font-size: 48px;
+            color: #e0e8f0;
+            text-align: center;
+        }
+
+        .slide-welcome .datetime {
+            position: absolute;
+            bottom: 60px;
+            font-size: 36px;
+            color: #b8c9e0;
+        }
+
+        /* Slajd statystyczny */
+        .slide-stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            flex-direction: column;
+        }
+
+        .slide-stats .big-number {
+            font-size: 200px;
+            color: #fff;
+            font-weight: 700;
+            text-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
+        }
+
+        .slide-stats .stats-label {
+            font-size: 56px;
+            color: #f0f0f0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .slide-stats .trend {
+            font-size: 48px;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .slide-stats .arrow {
+            font-size: 64px;
+        }
+
+        /* Slajd oferty pracy */
+        .slide-job {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .job-content {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .job-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .job-left h2 {
+            font-size: 72px;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .job-left .company {
+            font-size: 42px;
+            opacity: 0.9;
+            margin-bottom: 50px;
+        }
+
+        .job-left .location {
+            font-size: 38px;
+            opacity: 0.8;
+        }
+
+        .job-right {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .salary-box {
+            background: #2ecc71;
+            color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+        }
+
+        .salary-box .label {
+            font-size: 32px;
+            opacity: 0.9;
+        }
+
+        .salary-box .amount {
+            font-size: 64px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .job-details {
+            font-size: 32px;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .job-details li {
+            margin-bottom: 15px;
+            list-style: none;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .job-details li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .contact-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #000;
+            color: #ffd700;
+            padding: 25px 60px;
+            font-size: 42px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Slajd demograficzny */
+        .slide-demographic {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .demo-content {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .demo-left h2 {
+            font-size: 68px;
+            color: #fff;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        .demo-left .highlight {
+            font-size: 140px;
+            color: #fff;
+            font-weight: 700;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .demo-left .message {
+            font-size: 44px;
+            color: #fff;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+
+        .demo-right {
+            position: relative;
+            height: 600px;
+        }
+
+        .pie-chart {
+            width: 500px;
+            height: 500px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: conic-gradient(
+                #e91e63 0deg 227deg,
+                #9c27b0 227deg 360deg
+            );
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .pie-legend {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .legend-item {
+            font-size: 38px;
+            color: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .legend-color {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        /* Slajd informacyjny */
+        .slide-info {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .info-content {
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px;
+            padding: 80px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .info-content h2 {
+            font-size: 68px;
+            color: #333;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .info-content .icon {
+            font-size: 120px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .info-content p {
+            font-size: 42px;
+            color: #555;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .info-highlight {
+            background: #ff6b6b;
+            color: #fff;
+            padding: 30px 50px;
+            border-radius: 15px;
+            font-size: 46px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 40px;
+        }
+
+        /* Slajd kontaktowy */
+        .slide-contact {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .contact-content {
+            width: 100%;
+            text-align: center;
+            color: #fff;
+        }
+
+        .contact-content h2 {
+            font-size: 80px;
+            margin-bottom: 80px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .contact-box {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-box .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .contact-box .label {
+            font-size: 36px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .contact-box .value {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .qr-section {
+            margin-top: 50px;
+        }
+
+        .qr-placeholder {
+            width: 300px;
+            height: 300px;
+            background: #fff;
+            margin: 0 auto 30px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        /* Animacje wejścia */
+        @keyframes slideInFromLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div id="slideshow-container">
+        <!-- Slajd 1: Powitalny -->
+        <div class="slide slide-welcome active">
+            <div class="logo">🏢</div>
+            <h1>Witamy w Powiatowym<br>Urzędzie Pracy</h1>
+            <div class="subtitle">Sztum</div>
+            <div class="datetime" id="datetime"></div>
+        </div>
+
+        <!-- Slajd 2: Statystyka -->
+        <div class="slide slide-stats">
+            <div class="big-number">5,8%</div>
+            <div class="stats-label">Stopa bezrobocia w powiecie</div>
+            <div class="trend">
+                <span class="arrow">📈</span>
+                <span>Dane: Grudzień 2024</span>
+            </div>
+        </div>
+
+        <!-- Slajd 3: Oferta pracy #1 -->
+        <div class="slide slide-job">
+            <div class="job-content">
+                <div class="job-left">
+                    <h2>Robotnik Gospodarczy</h2>
+                    <div class="company">🏭 MHL Serwis Sp. z o.o.</div>
+                    <div class="location">📍 Sztumskie Pole</div>
+                </div>
+                <div class="job-right">
+                    <div class="salary-box">
+                        <div class="label">Wynagrodzenie od:</div>
+                        <div class="amount">4 666 zł</div>
+                        <div class="label">brutto</div>
+                    </div>
+                    <ul class="job-details">
+                        <li>Umowa o pracę</li>
+                        <li>Pełny etat</li>
+                        <li>Orzeczenie o niepełnosprawności</li>
+                        <li>Start: natychmiast</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="contact-bar">📞 Kontakt: pokój 12 | tel. 55 123-45-67</div>
+        </div>
+
+        <!-- Slajd 4: Oferta pracy #2 -->
+        <div class="slide slide-job" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="job-content">
+                <div class="job-left">
+                    <h2>Specjalista ds. Zamówień</h2>
+                    <div class="company">🏛️ Gmina Stary Dzierzgoń</div>
+                    <div class="location">📍 Stary Dzierzgoń</div>
+                </div>
+                <div class="job-right">
+                    <div class="salary-box" style="background: #3498db;">
+                        <div class="label">Wynagrodzenie od:</div>
+                        <div class="amount">4 806 zł</div>
+                        <div class="label">brutto</div>
+                    </div>
+                    <ul class="job-details">
+                        <li>Umowa o pracę</li>
+                        <li>Pełny etat</li>
+                        <li>Wykształcenie wyższe</li>
+                        <li>Start: 12.01.2026</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="contact-bar">📞 Kontakt: pokój 15 | tel. 55 123-45-68</div>
+        </div>
+
+        <!-- Slajd 5: Dane demograficzne -->
+        <div class="slide slide-demographic">
+            <div class="demo-content">
+                <div class="demo-left">
+                    <h2>Kobiety na rynku pracy</h2>
+                    <div class="highlight">63%</div>
+                    <div class="message">
+                        Mamy specjalne programy aktywizacyjne dla kobiet!
+                    </div>
+                </div>
+                <div class="demo-right">
+                    <div class="pie-chart"></div>
+                    <div class="pie-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #e91e63;"></div>
+                            <span>Kobiety 63%</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #9c27b0;"></div>
+                            <span>Mężczyźni 37%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slajd 6: Informacja prawna -->
+        <div class="slide slide-info">
+            <div class="info-content">
+                <div class="icon">⚖️</div>
+                <h2>Ważne zmiany prawne</h2>
+                <p>
+                    Od 1 grudnia 2025 wchodzą w życie nowe przepisy dotyczące zatrudniania cudzoziemców.
+                </p>
+                <p>
+                    Sprawdź szczegóły w pokoju 8 lub na naszej stronie internetowej.
+                </p>
+                <div class="info-highlight">
+                    Obowiązuje od 1 grudnia 2025
+                </div>
+            </div>
+        </div>
+
+        <!-- Slajd 7: Kontakt -->
+        <div class="slide slide-contact">
+            <div class="contact-content">
+                <h2>Skontaktuj się z nami</h2>
+                <div class="contact-grid">
+                    <div class="contact-box">
+                        <div class="icon">📞</div>
+                        <div class="label">Telefon</div>
+                        <div class="value">55 123-45-67</div>
+                    </div>
+                    <div class="contact-box">
+                        <div class="icon">📧</div>
+                        <div class="label">E-mail</div>
+                        <div class="value">info@pup-sztum.pl</div>
+                    </div>
+                    <div class="contact-box">
+                        <div class="icon">🌐</div>
+                        <div class="label">Strona WWW</div>
+                        <div class="value">www.pup-sztum.pl</div>
+                    </div>
+                    <div class="contact-box">
+                        <div class="icon">🕐</div>
+                        <div class="label">Godziny otwarcia</div>
+                        <div class="value">7:30 - 15:30</div>
+                    </div>
+                </div>
+                <div class="qr-section">
+                    <div class="qr-placeholder">QR CODE</div>
+                    <div style="font-size: 36px;">Zeskanuj kod QR, aby zobaczyć wszystkie oferty</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Konfiguracja
+        const SLIDE_INTERVAL = 10000; // 10 sekund
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        // Funkcja zmiany slajdu
+        function changeSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Automatyczna zmiana slajdów
+        setInterval(changeSlide, SLIDE_INTERVAL);
+
+        // Aktualizacja daty i czasu
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const dateTimeString = now.toLocaleDateString('pl-PL', options);
+            const dateTimeElement = document.getElementById('datetime');
+            if (dateTimeElement) {
+                dateTimeElement.textContent = dateTimeString;
+            }
+        }
+
+        // Aktualizuj czas co minutę
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+
+        // Zapobieganie uśpieniu ekranu (opcjonalnie)
+        let wakeLock = null;
+        if ('wakeLock' in navigator) {
+            navigator.wakeLock.request('screen').then(lock => {
+                wakeLock = lock;
+            }).catch(err => {
+                console.log('Wake Lock error:', err);
+            });
+        }
+    </script>
+</body>
+</html>

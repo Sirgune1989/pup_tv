@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Signage - Panel Edycji</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .job-card {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .job-number {
+            background: #3498db;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-add {
+            background: #2ecc71;
+            color: #fff;
+            margin-top: 15px;
+        }
+
+        .btn-add:hover {
+            background: #27ae60;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .preview-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #9b59b6;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .preview-link:hover {
+            background: #8e44ad;
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box p {
+            color: #2e7d32;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .warning-box p {
+            color: #e65100;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        code {
+            background: #2c3e50;
+            color: #2ecc71;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .requirements-list {
+            margin-top: 10px;
+        }
+
+        .requirements-list input {
+            margin-bottom: 8px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Panel Edycji Digital Signage</h1>
+        <p class="subtitle">Łatwa edycja treści bez znajomości kodu</p>
+
+        <div class="info-box">
+            <p><strong>💡 Wskazówka:</strong> Wypełnij pola poniżej, kliknij "Generuj kod" i skopiuj wygenerowany kod do pliku <code>config.js</code> na serwerze.</p>
+            <p><strong>📋 Aktualna data:</strong> <span id="currentDate"></span></p>
+        </div>
+
+        <!-- SEKCJA STATYSTYK -->
+        <div class="section">
+            <div class="section-title">📊 Statystyki Bezrobocia</div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Główna liczba (np. stopa bezrobocia):</label>
+                    <input type="text" id="statsNumber" value="5,8%" placeholder="5,8%">
+                </div>
+                <div class="form-group">
+                    <label>Opis statystyki:</label>
+                    <input type="text" id="statsLabel" value="Stopa bezrobocia w powiecie" placeholder="Stopa bezrobocia w powiecie">
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Trend (📈 wzrost / 📉 spadek):</label>
+                    <input type="text" id="statsTrend" value="📈" placeholder="📈">
+                </div>
+                <div class="form-group">
+                    <label>Data/okres danych:</label>
+                    <input type="text" id="statsPeriod" value="Dane: Grudzień 2024" placeholder="Dane: Grudzień 2024">
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKCJA OFERT PRACY -->
+        <div class="section">
+            <div class="section-title">💼 Oferty Pracy</div>
+            
+            <div id="jobsContainer">
+                <!-- Oferta 1 -->
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <span class="job-number">Oferta #1</span>
+                        <button class="btn-danger" onclick="removeJob(this)">🗑️ Usuń</button>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Stanowisko:</label>
+                            <input type="text" class="job-position" value="Robotnik Gospodarczy">
+                        </div>
+                        <div class="form-group">
+                            <label>Firma (z emoji):</label>
+                            <input type="text" class="job-company" value="🏭 MHL Serwis Sp. z o.o.">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Lokalizacja (z emoji 📍):</label>
+                            <input type="text" class="job-location" value="📍 Sztumskie Pole">
+                        </div>
+                        <div class="form-group">
+                            <label>Wynagrodzenie:</label>
+                            <input type="text" class="job-salary" value="4 666 zł">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Wymagania (każde w nowej linii):</label>
+                        <textarea class="job-requirements">Umowa o pracę
+Pełny etat
+Orzeczenie o niepełnosprawności
+Start: natychmiast</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Kontakt (z emoji 📞):</label>
+                        <input type="text" class="job-contact" value="📞 Kontakt: pokój 12 | tel. 55 123-45-67">
+                    </div>
+                </div>
+
+                <!-- Oferta 2 -->
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <span class="job-number">Oferta #2</span>
+                        <button class="btn-danger" onclick="removeJob(this)">🗑️ Usuń</button>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Stanowisko:</label>
+                            <input type="text" class="job-position" value="Specjalista ds. Zamówień">
+                        </div>
+                        <div class="form-group">
+                            <label>Firma (z emoji):</label>
+                            <input type="text" class="job-company" value="🏛️ Gmina Stary Dzierzgoń">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Lokalizacja (z emoji 📍):</label>
+                            <input type="text" class="job-location" value="📍 Stary Dzierzgoń">
+                        </div>
+                        <div class="form-group">
+                            <label>Wynagrodzenie:</label>
+                            <input type="text" class="job-salary" value="4 806 zł">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Wymagania (każde w nowej linii):</label>
+                        <textarea class="job-requirements">Umowa o pracę
+Pełny etat
+Wykształcenie wyższe
+Start: 12.01.2026</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Kontakt (z emoji 📞):</label>
+                        <input type="text" class="job-contact" value="📞 Kontakt: pokój 15 | tel. 55 123-45-68">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-add" onclick="addJob()">➕ Dodaj Kolejną Ofertę</button>
+        </div>
+
+        <!-- SEKCJA DEMOGRAFII -->
+        <div class="section">
+            <div class="section-title">👥 Dane Demograficzne</div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Procent kobiet:</label>
+                    <input type="number" id="womenPercent" value="63" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label>Komunikat:</label>
+                    <input type="text" id="demoMessage" value="Mamy specjalne programy aktywizacyjne dla kobiet!">
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKCJA INFORMACJI -->
+        <div class="section">
+            <div class="section-title">ℹ️ Informacje Prawne/Aktualności</div>
+            <div class="form-group">
+                <label>Tytuł:</label>
+                <input type="text" id="infoTitle" value="Ważne zmiany prawne">
+            </div>
+            <div class="form-group">
+                <label>Treść (każdy akapit w nowej linii):</label>
+                <textarea id="infoText">Od 1 grudnia 2025 wchodzą w życie nowe przepisy dotyczące zatrudniania cudzoziemców.
+Sprawdź szczegóły w pokoju 8 lub na naszej stronie internetowej.</textarea>
+            </div>
+            <div class="form-group">
+                <label>Podświetlony komunikat:</label>
+                <input type="text" id="infoHighlight" value="Obowiązuje od 1 grudnia 2025">
+            </div>
+        </div>
+
+        <!-- SEKCJA KONTAKTU -->
+        <div class="section">
+            <div class="section-title">📞 Dane Kontaktowe</div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Telefon:</label>
+                    <input type="text" id="contactPhone" value="55 123-45-67">
+                </div>
+                <div class="form-group">
+                    <label>E-mail:</label>
+                    <input type="text" id="contactEmail" value="info@pup-sztum.pl">
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Strona WWW:</label>
+                    <input type="text" id="contactWebsite" value="www.pup-sztum.pl">
+                </div>
+                <div class="form-group">
+                    <label>Godziny otwarcia:</label>
+                    <input type="text" id="contactHours" value="7:30 - 15:30">
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKCJA USTAWIEŃ -->
+        <div class="section">
+            <div class="section-title">⚙️ Ustawienia</div>
+            <div class="form-group">
+                <label>Czas wyświetlania slajdu (w sekundach):</label>
+                <input type="number" id="slideTime" value="10" min="5" max="60">
+                <p style="margin-top: 8px; font-size: 13px; color: #7f8c8d;">Zalecane: 10-15 sekund</p>
+            </div>
+        </div>
+
+        <!-- AKCJE -->
+        <div class="actions">
+            <button class="btn-success" onclick="generateConfig()">✨ Generuj Kod config.js</button>
+            <button class="btn-primary" onclick="copyToClipboard()">📋 Skopiuj do Schowka</button>
+        </div>
+
+        <div class="warning-box" style="margin-top: 20px;">
+            <p><strong>⚠️ Ważne:</strong> Po wygenerowaniu kodu:</p>
+            <p>1. Skopiuj cały kod poniżej</p>
+            <p>2. Otwórz plik <code>config.js</code> na serwerze</p>
+            <p>3. Zastąp całą zawartość nowym kodem</p>
+            <p>4. Zapisz plik</p>
+            <p>5. Odśwież stronę na TV (F5)</p>
+        </div>
+
+        <!-- OUTPUT -->
+        <div id="output" style="display:none; margin-top: 30px;">
+            <div class="section">
+                <div class="section-title">📄 Wygenerowany Kod config.js</div>
+                <textarea id="generatedCode" style="font-family: 'Courier New', monospace; font-size: 13px; height: 400px; background: #2c3e50; color: #2ecc71; padding: 20px;"></textarea>
+            </div>
+        </div>
+
+        <a href="index.html" class="preview-link" target="_blank">👁️ Podgląd Slideshow</a>
+    </div>
+
+    <script>
+        // Aktualizacja daty
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('pl-PL', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Licznik ofert
+        let jobCounter = 2;
+
+        // Dodawanie nowej oferty
+        function addJob() {
+            jobCounter++;
+            const jobsContainer = document.getElementById('jobsContainer');
+            const newJob = document.createElement('div');
+            newJob.className = 'job-card';
+            newJob.innerHTML = `
+                <div class="job-card-header">
+                    <span class="job-number">Oferta #${jobCounter}</span>
+                    <button class="btn-danger" onclick="removeJob(this)">🗑️ Usuń</button>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Stanowisko:</label>
+                        <input type="text" class="job-position" value="Nowe stanowisko">
+                    </div>
+                    <div class="form-group">
+                        <label>Firma (z emoji):</label>
+                        <input type="text" class="job-company" value="🏢 Nazwa firmy">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Lokalizacja (z emoji 📍):</label>
+                        <input type="text" class="job-location" value="📍 Miasto">
+                    </div>
+                    <div class="form-group">
+                        <label>Wynagrodzenie:</label>
+                        <input type="text" class="job-salary" value="0 zł">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Wymagania (każde w nowej linii):</label>
+                    <textarea class="job-requirements">Wymaganie 1
+Wymaganie 2
+Wymaganie 3</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Kontakt (z emoji 📞):</label>
+                    <input type="text" class="job-contact" value="📞 Kontakt: pokój XX | tel. 55 XXX-XX-XX">
+                </div>
+            `;
+            jobsContainer.appendChild(newJob);
+        }
+
+        // Usuwanie oferty
+        function removeJob(button) {
+            if (document.querySelectorAll('.job-card').length > 1) {
+                button.closest('.job-card').remove();
+            } else {
+                alert('Musisz mieć przynajmniej jedną ofertę!');
+            }
+        }
+
+        // Generowanie kodu config.js
+        function generateConfig() {
+            const slideTime = document.getElementById('slideTime').value * 1000;
+            
+            // Zbieranie ofert pracy
+            const jobCards = document.querySelectorAll('.job-card');
+            const jobs = [];
+            
+            jobCards.forEach((card, index) => {
+                const requirements = card.querySelector('.job-requirements').value
+                    .split('\n')
+                    .filter(r => r.trim())
+                    .map(r => `"${r.trim()}"`);
+                
+                const colors = [
+                    { bg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', salary: '#2ecc71' },
+                    { bg: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', salary: '#3498db' },
+                    { bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', salary: '#9b59b6' },
+                    { bg: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', salary: '#e74c3c' },
+                    { bg: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)', salary: '#16a085' }
+                ];
+                
+                const colorSet = colors[index % colors.length];
+                
+                jobs.push(`        {
+            position: "${card.querySelector('.job-position').value}",
+            company: "${card.querySelector('.job-company').value}",
+            location: "${card.querySelector('.job-location').value}",
+            salary: "${card.querySelector('.job-salary').value}",
+            requirements: [
+                ${requirements.join(',\n                ')}
+            ],
+            contact: "${card.querySelector('.job-contact').value}",
+            backgroundColor: "${colorSet.bg}",
+            salaryColor: "${colorSet.salary}"
+        }`);
+            });
+
+            // Generowanie pełnego kodu
+            const womenPercent = document.getElementById('womenPercent').value;
+            const menPercent = 100 - parseInt(womenPercent);
+
+            const infoTextLines = document.getElementById('infoText').value
+                .split('\n')
+                .filter(l => l.trim())
+                .map(l => `"${l.trim()}"`);
+
+            const code = `const CONFIG = {
+    slideInterval: ${slideTime},
+    
+    welcome: {
+        title: "Witamy w Powiatowym<br>Urzędzie Pracy",
+        subtitle: "Sztum",
+        logo: "🏢"
+    },
+    
+    stats: {
+        mainNumber: "${document.getElementById('statsNumber').value}",
+        label: "${document.getElementById('statsLabel').value}",
+        trend: "${document.getElementById('statsTrend').value}",
+        trendText: "${document.getElementById('statsPeriod').value}"
+    },
+    
+    jobs: [
+${jobs.join(',\n')}
+    ],
+    
+    demographic: {
+        title: "Kobiety na rynku pracy",
+        percentage: "${womenPercent}%",
+        message: "${document.getElementById('demoMessage').value}",
+        chartData: {
+            women: ${womenPercent},
+            men: ${menPercent}
+        }
+    },
+    
+    legalInfo: {
+        icon: "⚖️",
+        title: "${document.getElementById('infoTitle').value}",
+        text: [
+            ${infoTextLines.join(',\n            ')}
+        ],
+        highlight: "${document.getElementById('infoHighlight').value}"
+    },
+    
+    contact: {
+        title: "Skontaktuj się z nami",
+        items: [
+            {
+                icon: "📞",
+                label: "Telefon",
+                value: "${document.getElementById('contactPhone').value}"
+            },
+            {
+                icon: "📧",
+                label: "E-mail",
+                value: "${document.getElementById('contactEmail').value}"
+            },
+            {
+                icon: "🌐",
+                label: "Strona WWW",
+                value: "${document.getElementById('contactWebsite').value}"
+            },
+            {
+                icon: "🕐",
+                label: "Godziny otwarcia",
+                value: "${document.getElementById('contactHours').value}"
+            }
+        ],
+        qrText: "Zeskanuj kod QR, aby zobaczyć wszystkie oferty"
+    }
+};`;
+
+            document.getElementById('generatedCode').value = code;
+            document.getElementById('output').style.display = 'block';
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Kopiowanie do schowka
+        function copyToClipboard() {
+            const code = document.getElementById('generatedCode');
+            if (code.value) {
+                code.select();
+                document.execCommand('copy');
+                alert('✅ Kod skopiowany do schowka!\n\nTeraz:\n1. Otwórz plik config.js na serwerze\n2. Wklej (Ctrl+V)\n3. Zapisz\n4. Odśwież stronę na TV');
+            } else {
+                alert('⚠️ Najpierw wygeneruj kod!');
+            }
+        }
+    </script>
+</body>
+</html>
