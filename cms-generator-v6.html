@@ -1,0 +1,1630 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PUP InfoHub CMS v6</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --g: #00A651;
+            --g2: #008f47;
+            --g3: rgba(0, 166, 81, .12);
+            --bg: #0a0e14;
+            --sf: #111827;
+            --sf2: #1a2233;
+            --sf3: #222d40;
+            --bd: rgba(255, 255, 255, .07);
+            --bd2: rgba(255, 255, 255, .12);
+            --tx: #f0f4f8;
+            --tx2: #8b9cb8;
+            --tx3: #4a5568;
+            --red: #f85149;
+            --blue: #388bfd;
+            --r: 12px;
+            --sh: 0 2px 12px rgba(0, 0, 0, .5);
+            --sh2: 0 0 0 1px var(--bd2)
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--tx);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px
+        }
+
+        /* HEADER */
+        .hd {
+            background: linear-gradient(90deg, #0d1b12 0%, var(--sf) 100%);
+            border-bottom: 1px solid var(--bd);
+            padding: 0 24px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px)
+        }
+
+        .logo-hd {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        .logo-hd-ic {
+            width: 36px;
+            height: 36px;
+            background: var(--g);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            flex-shrink: 0;
+            box-shadow: 0 0 16px rgba(0, 166, 81, .35)
+        }
+
+        .logo-hd img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            border-radius: 9px
+        }
+
+        .logo-hd h1 {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -.3px
+        }
+
+        .logo-hd span {
+            font-size: 10px;
+            color: var(--tx2);
+            display: block;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            margin-top: 1px
+        }
+
+        .hd-r {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        /* BUTTONS */
+        .btn {
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: .15s all;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: -.1px
+        }
+
+        .btn-p {
+            background: var(--g);
+            color: #fff;
+            padding: 9px 20px;
+            font-size: 13px;
+            box-shadow: 0 2px 12px rgba(0, 166, 81, .3)
+        }
+
+        .btn-p:hover {
+            background: var(--g2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 166, 81, .4)
+        }
+
+        .btn-s {
+            background: var(--sf2);
+            color: var(--tx);
+            padding: 8px 14px;
+            font-size: 12px;
+            border: 1px solid var(--bd2)
+        }
+
+        .btn-s:hover {
+            background: var(--sf3);
+            border-color: rgba(255, 255, 255, .18)
+        }
+
+        .btn-d {
+            background: rgba(248, 81, 73, .1);
+            color: var(--red);
+            padding: 6px 11px;
+            font-size: 12px;
+            border: 1px solid rgba(248, 81, 73, .2)
+        }
+
+        .btn-d:hover {
+            background: rgba(248, 81, 73, .2)
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px
+        }
+
+        /* APP LAYOUT */
+        .app {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            height: calc(100vh - 58px)
+        }
+
+        /* SIDEBAR NAV */
+        .nav {
+            width: 200px;
+            background: var(--sf);
+            border-right: 1px solid var(--bd);
+            padding: 16px 0;
+            flex-shrink: 0;
+            overflow-y: auto
+        }
+
+        .ns {
+            padding: 5px 18px 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--tx3);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-top: 8px
+        }
+
+        .ni {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 18px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--tx2);
+            border-left: 3px solid transparent;
+            transition: .12s all;
+            user-select: none
+        }
+
+        .ni:hover {
+            background: var(--sf2);
+            color: var(--tx)
+        }
+
+        .ni.on {
+            color: var(--g);
+            border-left-color: var(--g);
+            background: linear-gradient(90deg, var(--g3), transparent)
+        }
+
+        .ni .ic {
+            font-size: 15px;
+            width: 18px;
+            text-align: center
+        }
+
+        /* MAIN */
+        .main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: var(--bg)
+        }
+
+        .tp {
+            display: none
+        }
+
+        .tp.on {
+            display: block
+        }
+
+        .pt {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -.5px
+        }
+
+        .pt small {
+            color: var(--tx2);
+            font-size: 13px;
+            font-weight: 400;
+            display: block;
+            margin-top: 3px;
+            letter-spacing: 0
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--sf);
+            border: 1px solid var(--bd);
+            border-radius: var(--r);
+            padding: 20px;
+            margin-bottom: 14px;
+            box-shadow: var(--sh)
+        }
+
+        .card h3 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -.1px;
+            color: var(--tx)
+        }
+
+        .card h3 .tag {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 20px;
+            background: var(--g3);
+            color: var(--g);
+            margin-left: 4px;
+            letter-spacing: .02em
+        }
+
+        /* FORMS */
+        .fg {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px
+        }
+
+        .fg label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--tx2);
+            letter-spacing: .04em;
+            text-transform: uppercase
+        }
+
+        .fg input,
+        .fg textarea,
+        .fg select {
+            background: rgba(0, 0, 0, .35);
+            border: 1px solid var(--bd2);
+            color: var(--tx);
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            width: 100%;
+            transition: .15s;
+            outline: none
+        }
+
+        .fg input:focus,
+        .fg textarea:focus,
+        .fg select:focus {
+            border-color: var(--g);
+            box-shadow: 0 0 0 3px rgba(0, 166, 81, .12), var(--sh2)
+        }
+
+        .fg textarea {
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.5
+        }
+
+        .fg select option {
+            background: var(--sf2)
+        }
+
+        .gr2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .gr3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px
+        }
+
+        /* THEME SELECTOR */
+        .th-opts {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .topt {
+            border: 2px solid var(--bd2);
+            border-radius: 10px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: .15s;
+            color: var(--tx2);
+            user-select: none
+        }
+
+        .topt:hover {
+            border-color: rgba(255, 255, 255, .2);
+            color: var(--tx)
+        }
+
+        .topt.on {
+            border-color: var(--g);
+            background: var(--g3);
+            color: var(--g)
+        }
+
+        .tdot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, .1)
+        }
+
+        /* ACCENT PICKER */
+        .ac-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px
+        }
+
+        .aprev {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, .2);
+            display: inline-block;
+            flex-shrink: 0
+        }
+
+        .asw {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: .15s
+        }
+
+        .asw.on {
+            border-color: rgba(255, 255, 255, .8);
+            transform: scale(1.1)
+        }
+
+        .asw:hover {
+            transform: scale(1.08)
+        }
+
+        /* TOGGLE */
+        .tgl {
+            position: relative;
+            display: inline-flex;
+            width: 40px;
+            height: 22px;
+            flex-shrink: 0;
+            cursor: pointer
+        }
+
+        .tgl input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute
+        }
+
+        .tgl-t {
+            position: absolute;
+            inset: 0;
+            background: var(--sf3);
+            border-radius: 11px;
+            transition: .2s;
+            border: 1px solid var(--bd2)
+        }
+
+        .tgl input:checked+.tgl-t {
+            background: var(--g);
+            border-color: var(--g)
+        }
+
+        .tgl-t::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-radius: 50%;
+            transition: .2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .3)
+        }
+
+        .tgl input:checked+.tgl-t::after {
+            transform: translateX(18px)
+        }
+
+        /* LOGO UPLOAD */
+        .logo-zone {
+            border: 2px dashed var(--bd2);
+            border-radius: var(--r);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .logo-zone:hover {
+            border-color: var(--g);
+            background: var(--g3)
+        }
+
+        .logo-zone .lz-ic {
+            font-size: 36px;
+            flex-shrink: 0
+        }
+
+        .logo-zone .lz-txt {
+            text-align: left
+        }
+
+        .logo-zone .lz-txt strong {
+            font-size: 13px;
+            color: var(--tx);
+            display: block
+        }
+
+        .logo-zone .lz-txt span {
+            font-size: 11px;
+            color: var(--tx2);
+            margin-top: 2px;
+            display: block
+        }
+
+        #logo-preview {
+            display: none;
+            align-items: center;
+            gap: 12px
+        }
+
+        #logo-preview img {
+            max-height: 48px;
+            max-width: 120px;
+            object-fit: contain;
+            border-radius: 6px;
+            border: 1px solid var(--bd2);
+            background: rgba(0, 0, 0, .3);
+            padding: 4px
+        }
+
+        /* SLIDES */
+        .add-btns {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            margin-bottom: 16px
+        }
+
+        .stype-btn {
+            background: var(--sf);
+            border: 1px solid var(--bd2);
+            color: var(--tx2);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: .15s
+        }
+
+        .stype-btn:hover {
+            border-color: var(--g);
+            color: var(--g);
+            background: var(--g3)
+        }
+
+        /* SLIDE CARD */
+        .sl-card {
+            background: var(--sf);
+            border: 1px solid var(--bd);
+            border-radius: var(--r);
+            margin-bottom: 10px;
+            box-shadow: var(--sh);
+            overflow: hidden;
+            transition: .15s
+        }
+
+        .sl-card:hover {
+            border-color: rgba(0, 166, 81, .3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .4)
+        }
+
+        .sl-card.dis {
+            opacity: .45
+        }
+
+        .sl-hd {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            background: linear-gradient(90deg, var(--sf2), var(--sf));
+            user-select: none
+        }
+
+        .sl-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--g3);
+            color: var(--g);
+            white-space: nowrap;
+            letter-spacing: .02em
+        }
+
+        .sl-title {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--tx)
+        }
+
+        .sl-acts {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            flex-shrink: 0
+        }
+
+        .sl-body {
+            padding: 16px;
+            border-top: 1px solid var(--bd);
+            display: none
+        }
+
+        .sl-card.open .sl-body {
+            display: block
+        }
+
+        /* OBJECT FIT SELECTOR */
+        .fit-sel {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px
+        }
+
+        .fit-opt {
+            flex: 1;
+            border: 1px solid var(--bd2);
+            border-radius: 8px;
+            padding: 7px 10px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--tx2);
+            transition: .15s;
+            user-select: none;
+            line-height: 1.3
+        }
+
+        .fit-opt:hover {
+            border-color: rgba(255, 255, 255, .2);
+            color: var(--tx)
+        }
+
+        .fit-opt.on {
+            border-color: var(--g);
+            background: var(--g3);
+            color: var(--g)
+        }
+
+        /* MEDIA DROP */
+        .mmode {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 10px
+        }
+
+        .mmtab {
+            flex: 1;
+            padding: 7px 8px;
+            background: var(--sf2);
+            border: 1px solid var(--bd2);
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--tx2);
+            cursor: pointer;
+            text-align: center;
+            transition: .12s;
+            user-select: none
+        }
+
+        .mmtab.on {
+            background: var(--g3);
+            border-color: var(--g);
+            color: var(--g)
+        }
+
+        .drop {
+            border: 2px dashed var(--bd2);
+            border-radius: var(--r);
+            padding: 28px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+            position: relative
+        }
+
+        .drop:hover,
+        .drop.ov {
+            border-color: var(--g);
+            background: var(--g3)
+        }
+
+        .drop .di {
+            font-size: 32px;
+            margin-bottom: 8px
+        }
+
+        .drop .dt {
+            font-size: 12px;
+            color: var(--tx2);
+            line-height: 1.5
+        }
+
+        .drop .dt strong {
+            color: var(--tx);
+            display: block;
+            font-size: 13px;
+            margin-bottom: 2px
+        }
+
+        .mp {
+            position: relative;
+            border-radius: 9px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, .4);
+            margin-top: 10px;
+            border: 1px solid var(--bd)
+        }
+
+        .mp img,
+        .mp video {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            display: block
+        }
+
+        .mp .rm {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, .8);
+            border: 1px solid rgba(255, 255, 255, .15);
+            color: #fff;
+            border-radius: 6px;
+            padding: 4px 9px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: .15s
+        }
+
+        .mp .rm:hover {
+            background: rgba(248, 81, 73, .8)
+        }
+
+        .hint {
+            font-size: 11px;
+            color: var(--tx3);
+            margin-top: 6px;
+            line-height: 1.5
+        }
+
+        .hint code {
+            background: var(--sf2);
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-family: inherit;
+            color: var(--tx2)
+        }
+
+        /* RATE HISTORY */
+        .rh-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px
+        }
+
+        .rh-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--sf2);
+            border-radius: 8px;
+            padding: 8px 10px;
+            border: 1px solid var(--bd)
+        }
+
+        .rh-row span {
+            font-size: 11px;
+            color: var(--tx3);
+            font-weight: 600;
+            min-width: 14px
+        }
+
+        .rh-row input {
+            background: transparent;
+            border: none;
+            color: var(--tx);
+            font-size: 12px;
+            flex: 1;
+            outline: none;
+            padding: 0;
+            min-width: 0
+        }
+
+        .rh-row .sep {
+            color: var(--tx3);
+            font-size: 12px
+        }
+
+        /* BACKUP */
+        .jbox {
+            width: 100%;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            background: rgba(0, 0, 0, .4);
+            border: 1px solid var(--bd2);
+            color: var(--tx2);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 180px;
+            resize: vertical;
+            transition: .15s
+        }
+
+        .jbox:focus {
+            outline: none;
+            border-color: var(--g)
+        }
+
+        /* NOTIF */
+        .ntf {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #fff;
+            padding: 11px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 9999;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: .25s cubic-bezier(.34, 1.56, .64, 1);
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .4)
+        }
+
+        .ntf.show {
+            transform: translateY(0);
+            opacity: 1
+        }
+
+        /* DIVIDER */
+        .div {
+            height: 1px;
+            background: var(--bd);
+            margin: 14px 0
+        }
+
+        /* INLINE FLEX ROW */
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        /* SECTION HEADER */
+        .sh {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--sf3);
+            border-radius: 3px
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--bd2)
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hd">
+        <div class="logo-hd">
+            <div class="logo-hd-ic" id="hd-logo-wrap">📺</div>
+            <div>
+                <h1>PUP InfoHub</h1><span>CMS Generator v6</span>
+            </div>
+        </div>
+        <div class="hd-r">
+            <button class="btn btn-s" onclick="saveState()">💾 Zapisz</button>
+            <button class="btn btn-s" onclick="tab('backup',document.getElementById('ni-backup'))">📤 Backup</button>
+            <button class="btn btn-p" onclick="doGenerate()">⬇️ Generuj index.html</button>
+        </div>
+    </div>
+    <div class="app">
+        <nav class="nav">
+            <div class="ns">Konfiguracja</div>
+            <div class="ni on" id="ni-settings" onclick="tab('settings',this)"><span class="ic">⚙️</span>Ustawienia
+            </div>
+            <div class="ni" id="ni-slides" onclick="tab('slides',this)"><span class="ic">🎞️</span>Slajdy</div>
+            <div class="ns">Elementy</div>
+            <div class="ni" id="ni-sidebar" onclick="tab('sidebar',this)"><span class="ic">📍</span>Pasek boczny</div>
+            <div class="ni" id="ni-ticker" onclick="tab('ticker',this)"><span class="ic">📢</span>Ticker</div>
+            <div class="ns">System</div>
+            <div class="ni" id="ni-backup" onclick="tab('backup',this)"><span class="ic">💾</span>Backup</div>
+        </nav>
+        <div class="main">
+
+            <!-- SETTINGS TAB -->
+            <div class="tp on" id="tp-settings">
+                <div class="pt">Ustawienia<small>Wygląd, dane urzędu i integracje</small></div>
+
+                <div class="card">
+                    <h3>🏷️ Logo i identyfikacja wizualna</h3>
+                    <div id="logo-preview"
+                        style="display:none;align-items:center;gap:14px;margin-bottom:14px;padding:12px;background:rgba(0,0,0,.3);border-radius:9px;border:1px solid var(--bd)">
+                        <img id="logo-img" src="" alt="Logo">
+                        <div style="flex:1">
+                            <div style="font-size:13px;font-weight:600;color:var(--tx)">Logo załadowane</div>
+                            <div style="font-size:11px;color:var(--tx2);margin-top:3px">Będzie widoczne w nagłówku TV
+                            </div>
+                        </div>
+                        <button class="btn btn-d btn-sm" onclick="removeLogo()">✕ Usuń</button>
+                    </div>
+                    <div id="logo-zone" class="logo-zone" onclick="document.getElementById('logoFile').click()"
+                        ondrop="logoDropped(event)"
+                        ondragover="event.preventDefault();this.style.borderColor='var(--g)'"
+                        ondragleave="this.style.borderColor=''">
+                        <div class="lz-ic">🖼️</div>
+                        <div class="lz-txt">
+                            <strong>Przeciągnij logo lub kliknij aby wybrać</strong>
+                            <span>PNG, SVG, JPG — zalecane PNG z przezroczystym tłem</span>
+                        </div>
+                        <input type="file" id="logoFile" style="display:none" accept="image/*,.svg"
+                            onchange="logoSelected(this)">
+                    </div>
+                    <div class="div"></div>
+                    <div class="gr2">
+                        <div class="fg"><label>Nazwa urzędu</label><input type="text" id="oName"
+                                value="Powiatowy Urząd Pracy w Sztumie"></div>
+                        <div class="fg"><label>Skrót / Podtytuł</label><input type="text" id="oSub"
+                                value="POWIATOWY URZĄD PRACY"></div>
+                        <div class="fg"><label>Telefon</label><input type="text" id="oPhone" value="55 640 25 10"></div>
+                        <div class="fg"><label>E-mail</label><input type="text" id="oEmail" value="gdst@praca.gov.pl">
+                        </div>
+                        <div class="fg"><label>Strona WWW</label><input type="text" id="oWww"
+                                value="sztum.praca.gov.pl"></div>
+                        <div class="fg"><label>Godziny otwarcia</label><input type="text" id="oHours"
+                                value="Pn-Pt: 7:30–15:30"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🌤️ Widget pogodowy <span class="tag">LIVE</span></h3>
+                    <div class="gr3">
+                        <div class="fg"><label>Miasto (wyświetlana nazwa)</label><input type="text" id="wxCity"
+                                value="Sztum"></div>
+                        <div class="fg"><label>Szerokość geogr. (Lat)</label><input type="number" id="wxLat"
+                                value="53.9167" step="0.001"></div>
+                        <div class="fg"><label>Długość geogr. (Lon)</label><input type="number" id="wxLon" value="19.05"
+                                step="0.001"></div>
+                    </div>
+                    <div class="hint">💡 Pogoda pobierana automatycznie z <strong>Open-Meteo</strong> (bez klucza API,
+                        bezpłatnie). Aktualizacja co 10 min na TV.</div>
+                </div>
+
+                <div class="card">
+                    <h3>🎨 Motyw kolorystyczny</h3>
+                    <div class="th-opts">
+                        <div class="topt on" data-t="light" onclick="setTheme('light',this)">
+                            <div class="tdot" style="background:#f0f2f5;border-color:#cbd5e0"></div>Jasny
+                        </div>
+                        <div class="topt" data-t="dark" onclick="setTheme('dark',this)">
+                            <div class="tdot" style="background:#0d1117"></div>Ciemny
+                        </div>
+                        <div class="topt" data-t="gray" onclick="setTheme('gray',this)">
+                            <div class="tdot" style="background:#eceff3;border-color:#cbd5e0"></div>Szary / Urzędowy
+                        </div>
+                    </div>
+                    <div class="fg" style="margin-top:14px"><label>Kolor akcentu</label>
+                        <div class="ac-row">
+                            <span class="aprev" id="aprev" style="background:#00A651"></span>
+                            <input type="color" id="acPicker" value="#00A651" oninput="setAcc(this.value)"
+                                style="width:40px;height:32px;border:none;background:none;cursor:pointer;padding:0;border-radius:6px">
+                            <div class="asw on" style="background:#00A651" onclick="setAcc('#00A651')"></div>
+                            <div class="asw" style="background:#0078d4" onclick="setAcc('#0078d4')"></div>
+                            <div class="asw" style="background:#8c54fb" onclick="setAcc('#8c54fb')"></div>
+                            <div class="asw" style="background:#e3405f" onclick="setAcc('#e3405f')"></div>
+                            <div class="asw" style="background:#f0a500" onclick="setAcc('#f0a500')"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>⏱️ Timing i layout</h3>
+                    <div class="gr2">
+                        <div class="fg"><label>Czas slajdu (sekundy)</label><input type="number" id="slideTime"
+                                value="10" min="3" max="120"></div>
+                        <div class="fg"><label>Szerokość sidebaru (px)</label><input type="number" id="swPx" value="380"
+                                min="220" max="600"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔊 Lektor TTS (Text-to-Speech)</h3>
+                    <div class="row">
+                        <label class="tgl"><input type="checkbox" id="ttsOn"><span class="tgl-t"></span></label>
+                        <span style="font-size:13px;color:var(--tx2)">Czytaj tekst slajdów na głos (wymaga Chrome /
+                            Edge)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDES TAB -->
+            <div class="tp" id="tp-slides">
+                <div class="pt">Slajdy<small>Zarządzaj treścią wyświetlacza TV</small></div>
+                <div class="add-btns">
+                    <button class="stype-btn" onclick="addSlide('text')">📝 Tekst / Info</button>
+                    <button class="stype-btn" onclick="addSlide('media')">🖼️ Pełne media</button>
+                    <button class="stype-btn" onclick="addSlide('split')">⬛ Split media+tekst</button>
+                    <button class="stype-btn" onclick="addSlide('stats')">📊 Statystyki PUP</button>
+                    <button class="stype-btn" onclick="addSlide('quote')">💬 Cytat / Motto</button>
+                </div>
+                <div id="slList"></div>
+                <div id="slEmpty" style="text-align:center;padding:60px 20px;color:var(--tx3)">
+                    <div style="font-size:48px;margin-bottom:12px">🎞️</div>
+                    <div style="font-size:14px;font-weight:600">Brak slajdów</div>
+                    <div style="font-size:12px;margin-top:4px">Dodaj pierwszy slajd przyciskiem powyżej</div>
+                </div>
+            </div>
+
+            <!-- SIDEBAR TAB -->
+            <div class="tp" id="tp-sidebar">
+                <div class="pt">Pasek boczny<small>Statyczne elementy na TV po prawej stronie</small></div>
+                <div class="card">
+                    <h3>🚪 Lista pokoi</h3>
+                    <div class="fg">
+                        <label>Format: NUMER|Nazwa pokoju|Piętro — jedna linia = jeden pokój</label>
+                        <textarea id="rooms" style="min-height:220px">1|Obsługa Bezrobotnych|Parter
+2|Doradca Zawodowy|Parter
+5|Kasa i Finanse|Parter
+10|Pośrednicy Pracy|Parter
+15|Staże i Szkolenia|I Piętro
+21|Kierownik|I Piętro
+25|Kadry i Płace|I Piętro</textarea>
+                    </div>
+                    <div class="hint">💡 Piętro jest opcjonalne. Możesz wpisać tylko: <code>5|Kasa</code></div>
+                </div>
+            </div>
+
+            <!-- TICKER TAB -->
+            <div class="tp" id="tp-ticker">
+                <div class="pt">Ticker<small>Wiadomości w pasku informacyjnym na dole ekranu</small></div>
+                <div class="card">
+                    <h3>📢 Wiadomości <span class="tag">jedna na linię</span></h3>
+                    <div class="fg">
+                        <textarea id="ticker" style="min-height:220px">Nabór wniosków na staże rusza od poniedziałku — zapraszamy do pokoju nr 15
+Trwają targi pracy w Dzierzgoniu — wejście bezpłatne
+Szkolenie komputerowe dla bezrobotnych — zapisy w pokoju nr 2
+Dotacje na założenie działalności gospodarczej — nowy nabór od marca 2026
+Oferty pracy dostępne na sztum.praca.gov.pl</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BACKUP TAB -->
+            <div class="tp" id="tp-backup">
+                <div class="pt">Backup<small>Eksport i import pełnej konfiguracji</small></div>
+                <div class="card">
+                    <h3>📤 Eksport</h3>
+                    <div class="row" style="margin-bottom:12px">
+                        <button class="btn btn-s" onclick="doExport()">📋 Odśwież JSON</button>
+                        <button class="btn btn-s" onclick="dlJSON()">⬇️ Pobierz plik .json</button>
+                    </div>
+                    <textarea class="jbox" id="expBox" readonly placeholder="Kliknij 'Odśwież JSON'..."></textarea>
+                </div>
+                <div class="card">
+                    <h3>📥 Import</h3>
+                    <div class="fg"><textarea class="jbox" id="impBox"
+                            placeholder="Wklej tutaj zapisany JSON i kliknij Importuj..."></textarea></div>
+                    <button class="btn btn-p btn-sm" onclick="doImport()" style="margin-top:8px">📥 Importuj i
+                        zastosuj</button>
+                </div>
+                <div class="card" style="border-color:rgba(248,81,73,.25)">
+                    <h3>⚠️ Reset</h3>
+                    <button class="btn btn-d" onclick="doReset()">🗑️ Przywróć ustawienia domyślne</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="ntf" id="ntf"></div>
+<script>
+    // ===== STATE =====
+    var S = {
+        theme: 'light', accent: '#00A651', slideTime: 10, sw: 380,
+        oName: 'Powiatowy Urząd Pracy w Sztumie', oSub: 'POWIATOWY URZĄD PRACY',
+        oPhone: '55 640 25 10', oEmail: 'gdst@praca.gov.pl',
+        oWww: 'sztum.praca.gov.pl', oHours: 'Pn-Pt: 7:30–15:30',
+        tts: false, logo: '', wxCity: 'Sztum', wxLat: 53.9167, wxLon: 19.05,
+        rooms: '1|Obsługa Bezrobotnych|Parter\n2|Doradca Zawodowy|Parter\n5|Kasa i Finanse|Parter\n10|Pośrednicy Pracy|Parter\n15|Staże i Szkolenia|I Piętro\n21|Kierownik|I Piętro\n25|Kadry i Płace|I Piętro',
+        ticker: 'Nabór wniosków na staże rusza od poniedziałku — zapraszamy do pokoju nr 15\nTrwają targi pracy w Dzierzgoniu — wejście bezpłatne\nSzkolenie komputerowe — zapisy w pokoju nr 2\nDotacje na działalność gospodarczą — nowy nabór od marca 2026\nOferty pracy na sztum.praca.gov.pl',
+        slides: []
+    };
+
+    // ===== SLIDE DEFAULTS =====
+    var DEF = {
+        text: { type: 'text', on: true, title: 'Nowy slajd informacyjny', body: 'Treść slajdu...', icon: '📌', svgIcon: '', tts: '' },
+        media: { type: 'media', on: true, mmode: 'embed', mdata: '', mpath: '', murl: '', objectFit: 'cover', tts: '' },
+        split: { type: 'split', on: true, title: 'Tytuł slajdu', body: 'Opis...', mmode: 'embed', mdata: '', mpath: '', murl: '', objectFit: 'cover', tts: '' },
+        stats: {
+            type: 'stats', on: true, period: 'Luty 2026', total: 618, rate: '5,8%', sztum: 217, dzierzgon: 200, staryTarg: 90, staryDzierzgon: 57, mikolajki: 54,
+            rateHistory: [{ m: 'Wrz 25', v: 6.4 }, { m: 'Paź 25', v: 6.1 }, { m: 'Lis 25', v: 6.0 }, { m: 'Gru 25', v: 5.9 }, { m: 'Sty 26', v: 5.9 }, { m: 'Lut 26', v: 5.8 }], tts: ''
+        },
+        quote: { type: 'quote', on: true, quote: 'Praca to nie tylko zarobek — to część naszej tożsamości', author: '— Doradca zawodowy PUP Sztum', tts: '' }
+    };
+    var LABELS = { text: '📝 Tekst', media: '🖼️ Media', split: '⬛ Split', stats: '📊 Statystyki', quote: '💬 Cytat' };
+
+    // ===== NAV =====
+    function tab(name, el) {
+        document.querySelectorAll('.tp').forEach(function (p) { p.classList.remove('on') });
+        document.querySelectorAll('.ni').forEach(function (n) { n.classList.remove('on') });
+        var panel = document.getElementById('tp-' + name);
+        if (panel) panel.classList.add('on');
+        if (el) el.classList.add('on');
+        if (name === 'backup') doExport();
+    }
+
+    // ===== THEME / ACCENT =====
+    function setTheme(t, el) {
+        S.theme = t;
+        document.querySelectorAll('.topt').forEach(function (o) { o.classList.remove('on') });
+        if (el) el.classList.add('on');
+    }
+    function setAcc(hex) {
+        S.accent = hex;
+        var p = document.getElementById('acPicker'); if (p) p.value = hex;
+        var a = document.getElementById('aprev'); if (a) a.style.background = hex;
+        document.querySelectorAll('.asw').forEach(function (s) { s.classList.remove('on') });
+    }
+
+    // ===== LOGO =====
+    function logoSelected(inp) { if (inp.files[0]) readLogo(inp.files[0]); }
+    function logoDropped(e) { e.preventDefault(); e.currentTarget.style.borderColor = ''; var f = e.dataTransfer && e.dataTransfer.files[0]; if (f) readLogo(f); }
+    function readLogo(f) {
+        var r = new FileReader();
+        r.onload = function (e) {
+            S.logo = e.target.result;
+            showLogoPreview();
+            updateHdLogo();
+            notif('✅ Logo załadowane');
+        };
+        r.readAsDataURL(f);
+    }
+    function showLogoPreview() {
+        var z = document.getElementById('logo-zone'); var p = document.getElementById('logo-preview');
+        var img = document.getElementById('logo-img');
+        if (S.logo) { if (z) z.style.display = 'none'; if (p) { p.style.display = 'flex'; img.src = S.logo; } }
+        else { if (z) z.style.display = 'flex'; if (p) p.style.display = 'none'; }
+    }
+    function removeLogo() { S.logo = ''; showLogoPreview(); updateHdLogo(); }
+    function updateHdLogo() {
+        var w = document.getElementById('hd-logo-wrap'); if (!w) return;
+        if (S.logo) { w.innerHTML = '<img src="' + S.logo + '" alt="Logo" style="width:32px;height:32px;object-fit:contain;border-radius:7px">'; }
+        else { w.innerHTML = '📺'; }
+    }
+
+    // ===== SLIDES CRUD =====
+    function addSlide(t) { S.slides.push(JSON.parse(JSON.stringify(DEF[t]))); renderSlides(); notif('Dodano: ' + LABELS[t]); }
+    function delSlide(i) { if (!confirm('Usunąć ten slajd?')) return; S.slides.splice(i, 1); renderSlides(); }
+    function moveSlide(i, d) { var j = i + d; if (j < 0 || j >= S.slides.length) return; var tmp = S.slides[i]; S.slides[i] = S.slides[j]; S.slides[j] = tmp; renderSlides(); }
+    function togSlide(i) { S.slides[i].on = !S.slides[i].on; var c = document.getElementById('slc-' + i); if (c) c.classList.toggle('dis', !S.slides[i].on); }
+    function togBody(i) { var c = document.getElementById('slc-' + i); if (c) c.classList.toggle('open'); }
+    function sf(i, f, v) { if (S.slides[i]) S.slides[i][f] = v; }
+    function sfRH(si, ri, field, v) { if (S.slides[si] && S.slides[si].rateHistory) S.slides[si].rateHistory[ri][field] = v; }
+    function setFit(i, v) { sf(i, 'objectFit', v); var els = document.querySelectorAll('.fo-' + i); els.forEach(function (e) { e.classList.toggle('on', e.dataset.v === v); }); }
+
+    // ===== MEDIA =====
+    function setMmode(i, m) { S.slides[i].mmode = m; renderSlides(); }
+    function mediaDrop(e, i) { e.preventDefault(); e.currentTarget.classList.remove('ov'); var f = e.dataTransfer && e.dataTransfer.files[0]; if (f) readMedia(f, i); }
+    function mediaInput(inp, i) { if (inp.files[0]) readMedia(inp.files[0], i); }
+    function readMedia(f, i) {
+        if (f.size > 15 * 1024 * 1024) { notif('⚠️ Plik >15MB — użyj trybu Folder dla dużych filmów', 1); return; }
+        var r = new FileReader();
+        r.onload = function (e) { S.slides[i].mdata = e.target.result; S.slides[i].mmode = 'embed'; renderSlides(); notif('✅ ' + f.name + ' załadowane'); };
+        r.readAsDataURL(f);
+    }
+    function rmMedia(i) { S.slides[i].mdata = ''; renderSlides(); }
+
+    // ===== HELPERS =====
+    function h(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function gc(id) { var e = document.getElementById(id); return e ? e.value : ''; }
+    function notif(msg, warn) { var e = document.getElementById('ntf'); e.textContent = msg; e.style.background = warn ? '#e3405f' : '#00A651'; e.classList.add('show'); setTimeout(function () { e.classList.remove('show'); }, 3000); }
+
+    // ===== RENDER SLIDES =====
+    function renderSlides() {
+        var lst = document.getElementById('slList');
+        var emp = document.getElementById('slEmpty');
+        lst.innerHTML = '';
+        emp.style.display = S.slides.length ? 'none' : 'block';
+        S.slides.forEach(function (s, i) {
+            var d = document.createElement('div');
+            d.id = 'slc-' + i;
+            d.className = 'sl-card' + (s.on ? '' : ' dis');
+            d.innerHTML = buildCard(s, i);
+            lst.appendChild(d);
+        });
+    }
+    function buildCard(s, i) {
+        var prev = h(s.title || s.quote || s.period || 'Media');
+        var hd = '<div class="sl-hd" onclick="togBody(' + i + ')">' +
+            '<span class="sl-badge">' + LABELS[s.type] + '</span>' +
+            '<span class="sl-title">' + prev + '</span>' +
+            '<div class="sl-acts">' +
+            '<button class="btn btn-s btn-sm" onclick="event.stopPropagation();moveSlide(' + i + ',-1)">↑</button>' +
+            '<button class="btn btn-s btn-sm" onclick="event.stopPropagation();moveSlide(' + i + ',1)">↓</button>' +
+            '<label class="tgl" onclick="event.stopPropagation()" style="margin:0 3px"><input type="checkbox"' + (s.on ? ' checked' : '') + ' onchange="togSlide(' + i + ')"><span class="tgl-t"></span></label>' +
+            '<button class="btn btn-d btn-sm" onclick="event.stopPropagation();delSlide(' + i + ')">✕</button>' +
+            '</div></div>';
+        var body = '<div class="sl-body">';
+        if (s.type === 'text') body += fText(s, i);
+        else if (s.type === 'media') body += fMedia(s, i);
+        else if (s.type === 'split') body += fSplit(s, i);
+        else if (s.type === 'stats') body += fStats(s, i);
+        else if (s.type === 'quote') body += fQuote(s, i);
+        body += '<div class="fg" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)"><label>Tekst TTS (opcjonalnie)</label>' +
+            '<input type="text" value="' + h(s.tts) + '" oninput="sf(' + i + ',\'tts\',this.value)" placeholder="Zostaw puste aby pominąć czytanie"></div>';
+        body += '</div>';
+        return hd + body;
+    }
+
+    function fText(s, i) {
+        return '<div class="gr2">' +
+            '<div class="fg"><label>Tytuł</label><input type="text" value="' + h(s.title) + '" oninput="sf(' + i + ',\'title\',this.value)"></div>' +
+            '<div class="fg"><label>Ikona (emoji)</label><input type="text" value="' + h(s.icon) + '" oninput="sf(' + i + ',\'icon\',this.value)" placeholder="📌"></div>' +
+            '</div><div class="fg"><label>Treść</label><textarea oninput="sf(' + i + ',\'body\',this.value)">' + h(s.body) + '</textarea></div>' +
+            '<div class="fg"><label>Własna ikona SVG (opcjonalnie — zastąpi emoji)</label><textarea oninput="sf(' + i + ',\'svgIcon\',this.value)" placeholder="&lt;svg xmlns...&gt;...&lt;/svg&gt;" style="min-height:60px;font-family:monospace;font-size:11px">' + h(s.svgIcon || '') + '</textarea></div>';
+    }
+    function fMedia(s, i) { return fMInput(s, i) + fFitSel(s, i); }
+    function fSplit(s, i) {
+        return fMInput(s, i) + fFitSel(s, i) +
+            '<div class="fg" style="margin-top:10px"><label>Tytuł</label><input type="text" value="' + h(s.title) + '" oninput="sf(' + i + ',\'title\',this.value)"></div>' +
+            '<div class="fg"><label>Opis</label><textarea oninput="sf(' + i + ',\'body\',this.value)">' + h(s.body) + '</textarea></div>';
+    }
+    function fStats(s, i) {
+        var main = '<div class="gr3">' +
+            ['period|Okres|text', 'total|Ogółem bezrobotnych|number', 'rate|Stopa bezrobocia|text',
+                'sztum|Sztum|number', 'dzierzgon|Dzierzgoń|number', 'staryTarg|Stary Targ|number',
+                'staryDzierzgon|Stary Dzierzgoń|number', 'mikolajki|Mikołajki Pom.|number'].map(function (x) {
+                    var p = x.split('|');
+                    return '<div class="fg"><label>' + p[1] + '</label><input type="' + p[2] + '" value="' + h(s[p[0]]) + '" oninput="sf(' + i + ',\'' + p[0] + '\',' + (p[2] === 'number' ? '+' : '') + 'this.value)"></div>';
+                }).join('') + '</div>';
+        var rh = '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)">' +
+            '<div class="sh"><label style="font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.06em">📈 Trend stopy bezrobocia (6 miesięcy)</label></div>' +
+            '<div class="rh-grid">' +
+            (s.rateHistory || []).map(function (r, ri) {
+                return '<div class="rh-row"><span>' + (ri + 1) + '</span>' +
+                    '<input type="text" value="' + h(r.m) + '" oninput="sfRH(' + i + ',' + ri + ',\'m\',this.value)" placeholder="np. Sty 26" style="max-width:60px">' +
+                    '<span class="sep">→</span>' +
+                    '<input type="number" value="' + r.v + '" oninput="sfRH(' + i + ',' + ri + ',\'v\',+this.value)" placeholder="%" step="0.1" style="max-width:60px">' +
+                    '<span style="font-size:11px;color:var(--tx3)">%</span></div>';
+            }).join('') +
+            '</div></div>';
+        return main + rh;
+    }
+    function fQuote(s, i) {
+        return '<div class="fg"><label>Cytat / Motto</label><textarea oninput="sf(' + i + ',\'quote\',this.value)">' + h(s.quote) + '</textarea></div>' +
+            '<div class="fg"><label>Autor</label><input type="text" value="' + h(s.author) + '" oninput="sf(' + i + ',\'author\',this.value)"></div>';
+    }
+    function fFitSel(s, i) {
+        var v = s.objectFit || 'cover';
+        return '<div class="fg" style="margin-top:10px"><label>Tryb wyświetlania obrazu</label>' +
+            '<div class="fit-sel">' +
+            '<div class="fit-opt fo-' + i + (v === 'cover' ? ' on' : '') + '" data-v="cover" onclick="setFit(' + i + ',\'cover\')">⬜ Wypełnij ramkę<br><span style="font-size:9px;color:inherit;opacity:.7">Cover — kadruje</span></div>' +
+            '<div class="fit-opt fo-' + i + (v === 'contain' ? ' on' : '') + '" data-v="contain" onclick="setFit(' + i + ',\'contain\')">🔲 Pokaż w całości<br><span style="font-size:9px;color:inherit;opacity:.7">Contain — cały obraz</span></div>' +
+            '</div></div>';
+    }
+    function fMInput(s, i) {
+        var modes = [['embed', '📦 Osadź (base64)'], ['folder', '📂 Ścieżka'], ['url', '🔗 URL']];
+        var html = '<div class="mmode">' + modes.map(function (m) {
+            return '<div class="mmtab' + (s.mmode === m[0] ? ' on' : '') + '" onclick="setMmode(' + i + ',\'' + m[0] + '\')">' + m[1] + '</div>';
+        }).join('') + '</div>';
+        if (s.mmode === 'embed') {
+            if (s.mdata) {
+                var isVid = s.mdata.indexOf('data:video') === 0;
+                html += '<div class="mp">' + (isVid ? '<video src="' + s.mdata + '" controls muted style="width:100%;max-height:190px"></video>' : '<img src="' + s.mdata + '" alt="">') +
+                    '<button class="rm" onclick="rmMedia(' + i + ')">✕ Usuń</button></div>';
+            } else {
+                html += '<div class="drop" ondrop="mediaDrop(event,' + i + ')" ondragover="event.preventDefault();this.classList.add(\'ov\')" ondragleave="this.classList.remove(\'ov\')" onclick="document.getElementById(\'fi' + i + '\').click()">' +
+                    '<div class="di">🖼️</div><div class="dt"><strong>Przeciągnij obraz lub wideo</strong>lub kliknij aby wybrać plik (do 15MB)</div>' +
+                    '<input type="file" id="fi' + i + '" style="display:none" accept="image/*,video/*" onchange="mediaInput(this,' + i + ')"></div>' +
+                    '<div class="hint">💡 Plik zostanie wbudowany w HTML — zero problemów ze ścieżkami</div>';
+            }
+        } else if (s.mmode === 'folder') {
+            html += '<div class="fg"><label>Ścieżka (np. media/foto.jpg)</label>' +
+                '<input type="text" value="' + h(s.mpath) + '" oninput="sf(' + i + ',\'mpath\',this.value)" placeholder="media/zdjecie.jpg"></div>' +
+                '<div class="hint">⚠️ Folder <code>media/</code> musi być obok <code>index.html</code></div>';
+        } else {
+            html += '<div class="fg"><label>URL zdalne (https://...)</label>' +
+                '<input type="text" value="' + h(s.murl) + '" oninput="sf(' + i + ',\'murl\',this.value)" placeholder="https://..."></div>';
+        }
+        return html;
+    }
+
+    // ===== PERSISTENCE =====
+    function collect() {
+        var th = document.querySelector('.topt.on'); S.theme = th ? th.dataset.t : 'light';
+        S.accent = gc('acPicker') || S.accent;
+        S.slideTime = +gc('slideTime') || 10; S.sw = +gc('swPx') || 380;
+        S.oName = gc('oName'); S.oSub = gc('oSub'); S.oPhone = gc('oPhone');
+        S.oEmail = gc('oEmail'); S.oWww = gc('oWww'); S.oHours = gc('oHours');
+        var tt = document.getElementById('ttsOn'); S.tts = tt ? tt.checked : false;
+        S.wxCity = gc('wxCity'); S.wxLat = +gc('wxLat') || 53.9167; S.wxLon = +gc('wxLon') || 19.05;
+        S.rooms = gc('rooms'); S.ticker = gc('ticker');
+    }
+    function saveState() { collect(); localStorage.setItem('pupv6', JSON.stringify(S)); notif('✅ Zapisano'); }
+    function loadState() {
+        try { var d = JSON.parse(localStorage.getItem('pupv6')); if (!d) return; Object.assign(S, d); applyToForm(); } catch (e) { }
+    }
+    function applyToForm() {
+        ['oName', 'oSub', 'oPhone', 'oEmail', 'oWww', 'oHours', 'rooms', 'ticker', 'wxCity', 'wxLat', 'wxLon'].forEach(function (k) {
+            var e = document.getElementById(k); if (e) e.value = S[k] || '';
+        });
+        var st = document.getElementById('slideTime'); if (st) st.value = S.slideTime;
+        var sw = document.getElementById('swPx'); if (sw) sw.value = S.sw;
+        var ac = document.getElementById('acPicker'); if (ac) ac.value = S.accent;
+        var ap = document.getElementById('aprev'); if (ap) ap.style.background = S.accent;
+        var tt = document.getElementById('ttsOn'); if (tt) tt.checked = S.tts;
+        document.querySelectorAll('.topt').forEach(function (o) { o.classList.toggle('on', o.dataset.t === S.theme); });
+        showLogoPreview(); updateHdLogo();
+        renderSlides();
+    }
+    function doExport() { collect(); var b = document.getElementById('expBox'); if (b) b.value = JSON.stringify(S, null, 2); }
+    function dlJSON() { collect(); var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' })); a.download = 'pup-cms-backup.json'; a.click(); }
+    function doImport() { try { Object.assign(S, JSON.parse(document.getElementById('impBox').value)); applyToForm(); notif('✅ Importowano konfigurację'); } catch (e) { notif('❌ Błąd JSON: ' + e.message, 1); } }
+    function doReset() { if (confirm('Skasować wszystko i zresetować?')) { localStorage.removeItem('pupv6'); location.reload(); } }
+
+    // ===== GENERATOR HELPERS =====
+    function shade(hex, p) { var n = parseInt(hex.replace('#', ''), 16), f = p / 100; var r = Math.min(255, Math.max(0, (n >> 16) + Math.round(255 * f))); var g = Math.min(255, Math.max(0, ((n >> 8) & 0xff) + Math.round(255 * f))); var b = Math.min(255, Math.max(0, (n & 0xff) + Math.round(255 * f))); return '#' + [r, g, b].map(function (x) { return x.toString(16).padStart(2, '0') }).join(''); }
+    function rgb(hex) { var n = parseInt(hex.replace('#', ''), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(','); }
+    function msrc(s) { if (s.mmode === 'embed' && s.mdata) return s.mdata; if (s.mmode === 'folder' && s.mpath) return s.mpath; if (s.mmode === 'url' && s.murl) return s.murl; return ''; }
+    function isVid(src) { if (!src) return false; if (src.indexOf('data:video') === 0) return true; return /\.(mp4|webm|ogg|mov)(\?|$)/i.test(src); }
+    function mtag(src, fit) { var f = fit || 'cover'; if (!src) return '<div class="nomedia">🖼️ Brak mediów</div>'; if (isVid(src)) return '<video src="' + src + '" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:' + f + ';display:block"></video>'; return '<img src="' + src + '" alt="" style="width:100%;height:100%;object-fit:' + f + ';display:block">'; }
+    function escG(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    function buildRoomsH(str) {
+        if (!str || !str.trim()) return '<li><span class="rn">?</span><span class="rl">Brak danych</span></li>';
+        return str.trim().split('\n').filter(Boolean).map(function (l) {
+            var p = l.split('|');
+            return '<li><span class="rn">' + escG((p[0] || '').trim()) + '</span><span class="rl">' + escG((p[1] || '').trim()) + '</span>' + (p[2] ? '<span class="rf">' + escG(p[2].trim()) + '</span>' : '') + '</li>';
+        }).join('');
+    }
+    function buildTickH(str) {
+        if (!str || !str.trim()) return '<span class="ti">Brak wiadomości</span>';
+        return str.trim().split('\n').filter(Boolean).map(function (l) {
+            return '<span class="ti">' + escG(l.trim()) + '</span><span class="ts">●</span>';
+        }).join('');
+    }
+
+    // SVG TREND CHART
+    function buildChart(rh) {
+        if (!rh || rh.length < 2) return '';
+        var W = 520, H = 130, pl = 38, pr = 12, pt = 14, pb = 28;
+        var vals = rh.map(function (x) { return parseFloat(x.v) || 0; });
+        var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+        var rng = mx - mn || 0.5; mn -= rng * 0.15; mx += rng * 0.15;
+        var pts = vals.map(function (v, i) {
+            return { x: pl + (i / (vals.length - 1)) * (W - pl - pr), y: pt + (1 - (v - mn) / (mx - mn)) * (H - pt - pb) };
+        });
+        var line = 'M' + pts.map(function (p) { return p.x.toFixed(1) + ',' + p.y.toFixed(1); }).join(' L');
+        var area = line + ' L' + pts[pts.length - 1].x.toFixed(1) + ',' + (H - pb) + ' L' + pts[0].x.toFixed(1) + ',' + (H - pb) + ' Z';
+        var dots = pts.map(function (p, i) {
+            return '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="4" fill="var(--ac)" stroke="var(--tile)" stroke-width="2.5"/>';
+        }).join('');
+        var xlbls = rh.map(function (r, i) {
+            return '<text x="' + pts[i].x.toFixed(1) + '" y="' + (H - pb + 14) + '" text-anchor="middle" font-size="9.5" fill="var(--tx2)">' + escG(r.m) + '</text>';
+        }).join('');
+        var ylbls = [mn, mn + (mx - mn) / 2, mx].map(function (v) {
+            var y = pt + (1 - (v - mn) / (mx - mn)) * (H - pt - pb);
+            return '<text x="' + (pl - 4) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end" font-size="9.5" fill="var(--tx3)">' + v.toFixed(1) + '%</text>';
+        }).join('');
+        return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block">' +
+            '<defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">' +
+            '<stop offset="0%" stop-color="var(--ac)" stop-opacity="0.25"/>' +
+            '<stop offset="100%" stop-color="var(--ac)" stop-opacity="0.02"/></linearGradient></defs>' +
+            '<path d="' + area + '" fill="url(#cg)"/>' +
+            '<path d="' + line + '" fill="none" stroke="var(--ac)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+            dots + xlbls + ylbls + '</svg>';
+    }
+
+    // SLIDES → HTML
+    function buildSlides(slides) {
+        var active = slides.filter(function (s) { return s.on; });
+        if (!active.length) return '<div class="slide active st"><div class="sti">📺</div><h2>Brak slajdów</h2><p>Dodaj slajdy w panelu CMS.</p></div>';
+        return active.map(function (s, i) {
+            var cl = 'slide' + (i === 0 ? ' active' : '');
+            var sp = s.tts ? ' data-sp="' + escG(s.tts) + '"' : '';
+            if (s.type === 'text') return bText(s, cl, sp);
+            if (s.type === 'media') return bMedia(s, cl, sp);
+            if (s.type === 'split') return bSplit(s, cl, sp);
+            if (s.type === 'stats') return bStats(s, cl, sp);
+            if (s.type === 'quote') return bQuote(s, cl, sp);
+            return '';
+        }).join('\n');
+    }
+    function bText(s, cl, sp) {
+        var icon = s.svgIcon ? s.svgIcon : '<span style="font-size:72px;line-height:1">' + escG(s.icon || '📌') + '</span>';
+        return '<div class="' + cl + ' st"' + sp + '><div class="sti">' + icon + '</div><h2>' + escG(s.title) + '</h2><p>' + escG(s.body).replace(/\n/g, '<br>') + '</p></div>';
+    }
+    function bMedia(s, cl, sp) { return '<div class="' + cl + ' sm"' + sp + '>' + mtag(msrc(s), s.objectFit || 'cover') + '</div>'; }
+    function bSplit(s, cl, sp) {
+        return '<div class="' + cl + ' ss"' + sp + '><div class="sml">' + mtag(msrc(s), s.objectFit || 'cover') + '</div><div class="str2"><h2>' + escG(s.title) + '</h2><p>' + escG(s.body).replace(/\n/g, '<br>') + '</p></div></div>';
+    }
+    function bStats(s, cl, sp) {
+        var vals = [s.sztum, s.dzierzgon, s.staryTarg, s.staryDzierzgon, s.mikolajki];
+        var names = ['Sztum', 'Dzierzgoń', 'Stary Targ', 'Stary Dzierzgoń', 'Mikołajki Pom.'];
+        var mx2 = Math.max.apply(null, vals);
+        var bars = vals.map(function (v, i) {
+            return '<div class="br"><span class="bn">' + names[i] + '</span><div class="bt"><div class="bf" data-w="' + Math.round(v / mx2 * 100) + '%"></div></div><span class="bv">' + v + '</span></div>';
+        }).join('');
+        var chart = buildChart(s.rateHistory || []);
+        return '<div class="' + cl + ' sk"' + sp + '>' +
+            '<div class="skh">' +
+            '<div class="skb"><span class="ctr" data-t="' + s.total + '">0</span><small>bezrobotnych</small></div>' +
+            '<div class="skr"><span>' + escG(s.rate) + '</span><small>stopa bezrobocia</small></div>' +
+            '<div class="skp">' + escG(s.period) + '</div></div>' +
+            '<div class="sklayout">' +
+            '<div class="skbars"><div class="skbars-t">Bezrobocie według gmin</div>' + bars + '</div>' +
+            '<div class="skchart"><div class="skchart-t">Trend stopy bezrobocia</div>' + chart + '</div>' +
+            '</div></div>';
+    }
+    function bQuote(s, cl, sp) {
+        return '<div class="' + cl + ' sq"' + sp + '><div class="sqm">\u201c</div><blockquote>' + escG(s.quote) + '</blockquote><cite>' + escG(s.author) + '</cite></div>';
+    }
+
+    // ===== MAIN GENERATE =====
+    function doGenerate() {
+        collect();
+        var html = buildTemplate(S);
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' }));
+        a.download = 'index.html';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        notif('✅ Plik index.html pobrany!');
+    }
+
+    function buildTemplate(C) {
+        var T = {
+            light: { bg: '#F4F7FA', tile: '#FFFFFF', tx: '#0f1923', tx2: '#4a5a6e', tx3: '#8b9cb8', tkbg: '#101820', tktx: '#e8edf3', bd: 'rgba(0,0,0,.07)', sh: '0 2px 16px rgba(0,0,0,.08)' },
+            dark: { bg: '#0D1117', tile: '#161B22', tx: '#E6EDF3', tx2: '#8B949E', tx3: '#4a5568', tkbg: '#010409', tktx: '#E6EDF3', bd: 'rgba(255,255,255,.08)', sh: '0 2px 20px rgba(0,0,0,.5)' },
+            gray: { bg: '#E8EDF3', tile: '#FFFFFF', tx: '#1A202C', tx2: '#4A5568', tx3: '#8b9cb8', tkbg: '#2C3240', tktx: '#F0F4F8', bd: 'rgba(0,0,0,.07)', sh: '0 2px 12px rgba(0,0,0,.06)' }
+        };
+        var t = T[C.theme] || T.light;
+        var ac = C.accent || '#00A651';
+        var acd = shade(ac, -12);
+        var acr = rgb(ac);
+        var sw = C.sw || 380;
+        var ms = (C.slideTime || 10) * 1000;
+        var sH = buildSlides(C.slides || []);
+        var rH = buildRoomsH(C.rooms || '');
+        var tkH = buildTickH(C.ticker || '');
+        var logoHtml = C.logo ? '<img src="' + C.logo + '" alt="Logo" style="height:38px;width:auto;object-fit:contain;">' : '<div style="width:38px;height:38px;background:' + ac + ';border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px">🏛️</div>';
+
+        return '<!DOCTYPE html>\n<html lang="pl">\n<head>\n<meta charset="UTF-8">\n<title>' + escG(C.oName) + ' — InfoTV</title>\n' +
+            '<style>\n' +
+            '*{box-sizing:border-box;margin:0;padding:0}\n' +
+            ':root{--bg:' + t.bg + ';--tile:' + t.tile + ';--tx:' + t.tx + ';--tx2:' + t.tx2 + ';--tx3:' + t.tx3 + ';--tkbg:' + t.tkbg + ';--tktx:' + t.tktx + ';--bd:' + t.bd + ';--sh:' + t.sh + ';--ac:' + ac + ';--acd:' + acd + ';--acr:' + acr + '}\n' +
+            'html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--tx)}\n' +
+            '.layout{display:grid;grid-template-columns:1fr ' + sw + 'px;grid-template-rows:60px 1fr 74px;width:100vw;height:100vh}\n' +
+            /* HEADER */
+            '.topbar{grid-column:1/-1;background:var(--tile);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:16px;box-shadow:var(--sh);z-index:10}\n' +
+            '.tb-brand{display:flex;align-items:center;gap:10px;flex-shrink:0}\n' +
+            '.tb-name{font-size:.85rem;font-weight:700;color:var(--tx);line-height:1.2}\n' +
+            '.tb-sub{font-size:.62rem;color:var(--tx2);font-weight:500;letter-spacing:.05em;text-transform:uppercase;margin-top:1px}\n' +
+            '.tb-divider{width:1px;height:32px;background:var(--bd);flex-shrink:0}\n' +
+            '.tb-weather{display:flex;align-items:center;gap:6px;font-size:.95rem;font-weight:600;color:var(--tx);white-space:nowrap}\n' +
+            '.tb-weather small{font-size:.75rem;color:var(--tx2);font-weight:500}\n' +
+            '.tb-spacer{flex:1}\n' +
+            '.tb-datetime{display:flex;align-items:center;gap:14px;flex-shrink:0}\n' +
+            '.tb-date{font-size:.82rem;color:var(--tx2);font-weight:500;text-align:right;line-height:1.4}\n' +
+            '.tb-clock{font-family:"Courier New",monospace;font-size:2.1rem;font-weight:700;color:var(--ac);letter-spacing:-1px;line-height:1}\n' +
+            /* STAGE */
+            '.stage{position:relative;overflow:hidden;padding:14px 0 14px 14px}\n' +
+            '.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;transition:opacity .9s ease;overflow:hidden;border-radius:20px;background:var(--tile);box-shadow:0 4px 24px rgba(0,0,0,.1)}\n' +
+            '.slide.active{opacity:1;z-index:2}\n' +
+            /* TEXT SLIDE */
+            '.st{padding:48px;justify-content:center;gap:4px}\n' +
+            '.sti{margin-bottom:18px}\n' +
+            '.sti svg{width:72px;height:72px;color:var(--ac)}\n' +
+            '.st h2{font-size:3.1rem;font-weight:800;color:var(--ac);margin-bottom:16px;line-height:1.12;letter-spacing:-1px}\n' +
+            '.st p{font-size:2rem;line-height:1.65;color:var(--tx2);white-space:pre-line;font-weight:400}\n' +
+            /* MEDIA SLIDE */
+            '.sm{padding:0;border-radius:20px;overflow:hidden}\n' +
+            '.nomedia{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:1.8rem;color:var(--tx2);flex-direction:column;gap:12px}\n' +
+            /* SPLIT SLIDE */
+            '.ss{flex-direction:row;padding:0;overflow:hidden;border-radius:20px}\n' +
+            '.sml{width:50%;height:100%;overflow:hidden;flex-shrink:0}\n' +
+            '.str2{flex:1;padding:48px;display:flex;flex-direction:column;justify-content:center}\n' +
+            '.str2 h2{font-size:2.7rem;font-weight:800;color:var(--ac);margin-bottom:16px;line-height:1.14;letter-spacing:-.8px}\n' +
+            '.str2 p{font-size:1.8rem;line-height:1.65;color:var(--tx2);white-space:pre-line}\n' +
+            /* STATS SLIDE */
+            '.sk{padding:32px 36px;overflow:hidden}\n' +
+            '.skh{display:flex;align-items:flex-end;gap:36px;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--bd)}\n' +
+            '.skb{display:flex;flex-direction:column}\n' +
+            '.ctr{font-size:5rem;font-weight:900;color:var(--ac);font-family:"Courier New",monospace;line-height:1;letter-spacing:-2px}\n' +
+            '.skb small,.skr small{font-size:.95rem;color:var(--tx2);margin-top:5px;font-weight:500}\n' +
+            '.skr{display:flex;flex-direction:column}\n' +
+            '.skr>span{font-size:3.6rem;font-weight:900;color:var(--tx);font-family:"Courier New",monospace;line-height:1;letter-spacing:-1px}\n' +
+            '.skp{margin-left:auto;font-size:1rem;color:var(--ac);background:rgba(var(--acr),.08);padding:8px 16px;border-radius:8px;font-weight:700;border:1px solid rgba(var(--acr),.15)}\n' +
+            '.sklayout{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}\n' +
+            '.skbars-t,.skchart-t{font-size:.85rem;font-weight:700;color:var(--tx2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}\n' +
+            '.skbars{display:flex;flex-direction:column;gap:11px}\n' +
+            '.br{display:grid;grid-template-columns:130px 1fr 50px;align-items:center;gap:10px}\n' +
+            '.bn{font-size:1.05rem;font-weight:500;color:var(--tx2)}\n' +
+            '.bt{height:18px;background:rgba(var(--acr),.1);border-radius:9px;overflow:hidden}\n' +
+            '.bf{height:100%;background:linear-gradient(90deg,var(--ac),var(--acd));border-radius:9px;width:0;transition:width 1.1s cubic-bezier(.22,1,.36,1)}\n' +
+            '.bv{font-size:1.05rem;font-weight:700;color:var(--ac);text-align:right}\n' +
+            /* QUOTE SLIDE */
+            '.sq{padding:64px;justify-content:center;align-items:center;text-align:center}\n' +
+            '.sqm{font-size:9rem;color:rgba(var(--acr),.1);font-family:Georgia,serif;line-height:.7;margin-bottom:-12px}\n' +
+            '.sq blockquote{font-size:2.7rem;font-weight:700;color:var(--tx);line-height:1.45;max-width:850px;margin-bottom:28px;letter-spacing:-.5px}\n' +
+            '.sq cite{font-size:1.6rem;color:var(--ac);font-style:normal;font-weight:700}\n' +
+            /* SIDEBAR */
+            '.sidebar{display:flex;flex-direction:column;padding:14px 14px 0 7px;background:var(--bg);overflow:hidden}\n' +
+            '.stile{background:var(--tile);border-radius:16px;box-shadow:var(--sh);border:1px solid var(--bd)}\n' +
+            '.scontact{padding:16px;margin-bottom:7px;flex-shrink:0}\n' +
+            '.scontact h4,.srooms h4{font-size:.72rem;font-weight:700;color:var(--tx2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em}\n' +
+            '.cl{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:.82rem;font-weight:500}\n' +
+            '.cl:last-child{border:none}\n' +
+            '.clic{width:26px;height:26px;background:rgba(var(--acr),.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1px solid rgba(var(--acr),.12)}\n' +
+            '.srooms{flex:1;padding:16px;overflow:hidden;display:flex;flex-direction:column;min-height:0}\n' +
+            '.srooms ul{list-style:none;overflow-y:auto;flex:1}\n' +
+            '.srooms li{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--bd)}\n' +
+            '.srooms li:last-child{border:none}\n' +
+            '.rn{background:var(--ac);color:#fff;font-weight:800;font-size:.68rem;min-width:26px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}\n' +
+            '.rl{font-size:.78rem;flex:1;font-weight:500;color:var(--tx)}\n' +
+            '.rf{font-size:.66rem;color:var(--ac);background:rgba(var(--acr),.08);padding:1px 5px;border-radius:3px;font-weight:600;white-space:nowrap}\n' +
+            /* TICKER */
+            '.ticker{grid-column:1/-1;background:var(--tkbg);color:var(--tktx);display:flex;align-items:center;overflow:hidden;position:relative}\n' +
+            '.tlbl{padding:0 16px 0 20px;font-size:.78rem;font-weight:800;color:var(--ac);text-transform:uppercase;letter-spacing:.12em;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:7px}\n' +
+            '.tlbl::before{content:"";display:inline-block;width:8px;height:8px;background:var(--ac);border-radius:50%;animation:blink 1.5s ease-in-out infinite}\n' +
+            '@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}\n' +
+            '.tlbl::after{content:"";display:block;width:1px;height:28px;background:rgba(var(--acr),.3);margin-left:10px}\n' +
+            '.tktrack{flex:1;overflow:hidden;height:100%;display:flex;align-items:center}\n' +
+            '.tkins{display:flex;align-items:center;white-space:nowrap;animation:tks linear infinite}\n' +
+            '.ti{font-size:1.05rem;font-weight:600;padding:0 26px;letter-spacing:-.1px}\n' +
+            '.ts{color:var(--ac);font-size:.9rem;opacity:.4}\n' +
+            '@keyframes tks{from{transform:translateX(0)}to{transform:translateX(-50%)}}\n' +
+            '</style>\n</head>\n<body>\n' +
+            '<div class="layout">\n' +
+            /* HEADER HTML */
+            '<div class="topbar">\n' +
+            '<div class="tb-brand">' + logoHtml +
+            '<div><div class="tb-name">InfoHub</div><div class="tb-sub">' + escG(C.oSub || 'Powiatowy Urząd Pracy') + '</div></div></div>\n' +
+            '<div class="tb-divider"></div>\n' +
+            '<div class="tb-weather" id="wx"><span style="color:var(--tx2);font-size:.8rem">Ładowanie pogody…</span></div>\n' +
+            '<div class="tb-spacer"></div>\n' +
+            '<div class="tb-datetime"><div class="tb-date" id="dt">—</div><div class="tb-clock" id="clk">--:--</div></div>\n' +
+            '</div>\n' +
+            /* STAGE */
+            '<div class="stage">\n' + sH + '\n</div>\n' +
+            /* SIDEBAR */
+            '<div class="sidebar">\n' +
+            '<div class="stile scontact"><h4>Kontakt</h4>' +
+            '<div class="cl"><div class="clic">📞</div>' + escG(C.oPhone) + '</div>' +
+            '<div class="cl"><div class="clic">✉️</div>' + escG(C.oEmail) + '</div>' +
+            '<div class="cl"><div class="clic">🌐</div>' + escG(C.oWww) + '</div>' +
+            '<div class="cl"><div class="clic">🕐</div>' + escG(C.oHours) + '</div></div>\n' +
+            '<div class="stile srooms" style="flex:1"><h4>Pokoje</h4><ul>' + rH + '</ul></div>\n' +
+            '</div>\n' +
+            /* TICKER */
+            '<div class="ticker"><div class="tlbl">NA ŻYWO</div><div class="tktrack"><div class="tkins" id="tkins">' + tkH + tkH + '</div></div></div>\n' +
+            '</div>\n' +
+            '<script>\n' +
+            '(function(){\n' +
+            // CLOCK
+            'function tick(){var n=new Date();document.getElementById("clk").textContent=n.toLocaleTimeString("pl-PL",{hour:"2-digit",minute:"2-digit"});document.getElementById("dt").textContent=n.toLocaleDateString("pl-PL",{weekday:"short",day:"numeric",month:"long",year:"numeric"});}\n' +
+            'tick();setInterval(tick,1000);\n' +
+            // WEATHER
+            'var WX={0:"☀️",1:"🌤️",2:"⛅",3:"☁️",45:"🌫️",48:"🌫️",51:"🌦️",53:"🌦️",55:"🌧️",61:"🌧️",63:"🌧️",65:"🌧️",71:"❄️",73:"❄️",75:"❄️",80:"🌦️",81:"🌦️",82:"🌧️",95:"⛈️"};\n' +
+            'function loadWx(){fetch("https://api.open-meteo.com/v1/forecast?latitude=' + C.wxLat + '&longitude=' + C.wxLon + '&current_weather=true").then(function(r){return r.json();}).then(function(d){var w=d.current_weather;var ic=WX[w.weathercode]||"🌡️";document.getElementById("wx").innerHTML=ic+" <strong>"+Math.round(w.temperature)+"°C</strong>&nbsp;<small>' + escG(C.wxCity || '') + '</small>";}).catch(function(){document.getElementById("wx").innerHTML="🌡️ —";});}\n' +
+            'loadWx();setInterval(loadWx,600000);\n' +
+            // TICKER SPEED
+            'var ti=document.getElementById("tkins");if(ti){var w=ti.scrollWidth/2;ti.style.animationDuration=Math.max(15,w/90)+"s";}\n' +
+            // SLIDE ROTATOR
+            'var sl=document.querySelectorAll(".slide"),cur=0;\n' +
+            'function anm(el){\n' +
+            'el.querySelectorAll(".bf").forEach(function(b){setTimeout(function(){b.style.width=b.getAttribute("data-w");},100);});\n' +
+            'el.querySelectorAll(".ctr[data-t]").forEach(function(c){\n' +
+            'var tg=parseInt(c.getAttribute("data-t")),st=null,dur=1500;\n' +
+            'function step(ts){if(!st)st=ts;var p=Math.min((ts-st)/dur,1);c.textContent=Math.floor(p*tg).toLocaleString("pl-PL");if(p<1)requestAnimationFrame(step);else c.textContent=tg.toLocaleString("pl-PL");}\n' +
+            'requestAnimationFrame(step);});\n' +
+            'var sp=el.getAttribute("data-sp");if(sp&&window.speechSynthesis){speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(sp);u.lang="pl-PL";u.rate=0.9;speechSynthesis.speak(u);}\n' +
+            '}\n' +
+            'if(sl.length>0)anm(sl[0]);\n' +
+            'if(sl.length>1){setInterval(function(){sl[cur].classList.remove("active");cur=(cur+1)%sl.length;sl[cur].classList.add("active");anm(sl[cur]);},' + ms + ');}\n' +
+            '})();\n' +
+            '<\/script>\n' +
+            '</body>\n</html>';
+    }
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', function () {
+        S.slides = [
+            { type: 'text', on: true, title: 'Witamy w Powiatowym Urzędzie Pracy', body: 'Oferujemy bezpłatną pomoc w znalezieniu zatrudnienia.\nDoradztwo zawodowe, staże i szkolenia.\n\nZapraszamy — pokój nr 1 (Parter).', icon: '👋', svgIcon: '', tts: '' },
+            JSON.parse(JSON.stringify(DEF.stats)),
+            { type: 'quote', on: true, quote: 'Praca to nie tylko zarobek — to część naszej tożsamości', author: '— Doradca zawodowy PUP Sztum', tts: '' }
+        ];
+        loadState();
+        renderSlides();
+    });
+</script>
+</body>
+
+</html>
