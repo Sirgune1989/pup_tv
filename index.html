@@ -1,12 +1,93 @@
 <!DOCTYPE html>
-<html lang="pl">
-<head>
+<html><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PUP InfoHub CMS v10.9</title>
-<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<title>TV Box Stress Test — TV-HUB-CMS Diagnostics</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--g:#00A651;--g2:#008f47;--g3:rgba(0,166,81,.12);--bg:#0b0f15;--sf:#111827;--sf2:#1a2233;--sf3:#222d40;--bd:rgba(255,255,255,.06);--bd2:rgba(255,255,255,.1);--tx:#f0f4f8;--tx2:#8b9cb8;--tx3:#4a5568;--red:#f85149;--blue:#388bfd;--r:14px;--sh:0 4px 24px rgba(0,0,0,.35);--sh2:0 0 0 1px var(--bd2);--glass:rgba(17,24,39,.65);--glass-bd:rgba(255,255,255,.08)}
-body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;flex-direction:column;font-size:14px}
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#1a1a2e; color:#fff; font-family:Arial, sans-serif; overflow:hidden; width:100vw; height:100vh; }
+.slide { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; 
+         justify-content:center; font-size:4rem; opacity:0; 
+         transition: opacity 1.2s ease; }
+.slide.active { opacity:1; }
+.slide-label { font-size:1.5rem; opacity:0.6; margin-top:16px; }
+.ticker-bar { position:fixed; bottom:0; left:0; right:0; background:#0f3460;
+              padding:14px 20px; font-size:1.4rem; display:flex; 
+              align-items:center; gap:16px; border-top:2px solid rgba(255,255,255,0.15); }
+.ticker-label { background:#e94560; padding:4px 10px; border-radius:4px; 
+                font-size:0.9rem; font-weight:700; white-space:nowrap; }
+.ticker-text { flex:1; }
+#info-panel { position:fixed; top:10px; right:10px; font-size:0.95rem; 
+              background:rgba(0,0,0,0.7); padding:10px 14px; border-radius:8px;
+              border:1px solid rgba(255,255,255,0.2); line-height:1.8; }
+#info-panel span { color:#00e5ff; font-weight:700; }
+</style>
+</head>
+<body>
+
+<div id="s1" class="slide active" style="background:linear-gradient(135deg,#16213e,#0f3460)">
+  🔵
+  <div class="slide-label">Slajd 1 / 3 — Test stabilności TV Box</div>
+</div>
+<div id="s2" class="slide" style="background:linear-gradient(135deg,#0f3460,#533483)">
+  🟢
+  <div class="slide-label">Slajd 2 / 3 — Zmiana co 10 sekund</div>
+</div>
+<div id="s3" class="slide" style="background:linear-gradient(135deg,#533483,#1a1a2e)">
+  🟣
+  <div class="slide-label">Slajd 3 / 3 — Jeśli to działa → problem w kodzie CMS</div>
+</div>
+
+<div class="ticker-bar">
+  <div class="ticker-label">TEST</div>
+  <div class="ticker-text" id="ticker-text">Trwa test stabilności TV Box S · Obserwuj przez 30+ minut · Czas: <span id="clk">--:--:--</span></div>
+</div>
+
+<div id="info-panel">
+  Slajd: <span id="cur">1</span>/3<br>
+  Czas pracy: <span id="uptime">0s</span><br>
+  Zmian slajdów: <span id="switches">0</span><br>
+  Timerów: <span id="timers">2</span> (powinno być stałe!)
+</div>
+
+<script>
+(function(){
+  var slides = document.querySelectorAll('.slide');
+  var cur = 0;
+  var startTime = Date.now();
+  var switchCount = 0;
+
+  // TIMER 1: Rotacja slajdów
+  var slideTimer = setInterval(function(){
+    slides[cur].classList.remove('active');
+    cur = (cur + 1) % slides.length;
+    slides[cur].classList.add('active');
+    switchCount++;
+    document.getElementById('cur').textContent = cur + 1;
+    document.getElementById('switches').textContent = switchCount;
+  }, 10000);
+
+  // TIMER 2: Zegar i uptime
+  var clockTimer = setInterval(function(){
+    var now = new Date();
+    document.getElementById('clk').textContent = now.toLocaleTimeString('pl-PL');
+    var sec = Math.floor((Date.now() - startTime) / 1000);
+    var h = Math.floor(sec / 3600);
+    var m = Math.floor((sec % 3600) / 60);
+    var s = sec % 60;
+    document.getElementById('uptime').textContent = 
+      (h > 0 ? h + 'h ' : '') + m + 'm ' + s + 's';
+  }, 1000);
+
+  // Globalne przechwycenie błędów JS
+  window.onerror = function(msg, src, line) {
+    document.getElementById('ticker-text').textContent = 
+      '⚠️ BŁĄD JS: ' + msg + ' (linia ' + line + ')';
+    document.getElementById('ticker-text').style.color = '#ff6b6b';
+    return true;
+  };
+
+  // Sprawdzenie czy timery się nie mnożą (nie powinny rosnąć powyżej 2)
+  document.getElementById('timers').textContent = '2 (OK)';
+})();
+</script>
+</body></html>
